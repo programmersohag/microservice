@@ -1,0 +1,31 @@
+
+internal.lb.uri: http://localhost
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: student-service
+          uri: ${internal.lb.uri}:9001
+          predicates:
+            - Path=/student/**
+        - id: teacher-service
+          uri: ${internal.lb.uri}:9002
+          predicates:
+            - Path=/teacher/**
+
+
+#logging:
+#  level:
+#
+#    org.springframework.cloud.gateway: TRACE
+#    org.springframework.http.server.reactive: DEBUG
+#    org.springframework.web.reactive: DEBUG
+#    reactor.ipc.netty: DEBUG
+#    reactor.netty: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,metrics
+
