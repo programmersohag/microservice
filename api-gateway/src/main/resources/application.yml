@@ -1,6 +1,7 @@
-
 internal.lb.uri: http://localhost
 spring:
+  application:
+    name: gateway-service
   cloud:
     gateway:
       routes:
@@ -12,8 +13,23 @@ spring:
           uri: ${internal.lb.uri}:9002
           predicates:
             - Path=/teacher/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,metrics
+server:
+  port: 8484
 
+  eureka:
+    client:
+      region: default
+      registryFetchIntervalSeconds: 5
+      service-url:
+        defaultZone: ${internal.lb.uri}:8761/eureka
 
+#check api gateway working properly
+#http://localhost:8484/actuator/gateway/routes/student-service
 #logging:
 #  level:
 #
@@ -22,10 +38,3 @@ spring:
 #    org.springframework.web.reactive: DEBUG
 #    reactor.ipc.netty: DEBUG
 #    reactor.netty: DEBUG
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: gateway,metrics
-
